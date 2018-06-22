@@ -21,7 +21,7 @@ def get_filters():
     
     validCity = False
     while True:
-        city = input('Would you like to see data for Chicago, New York, or Washington?')
+        city = input('Would you like to see data for Chicago, New York, or Washington?').lower()
         if city in cities:
             break
 
@@ -29,14 +29,14 @@ def get_filters():
     months = ['all', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september','october', 'november', 'december']
 
     while True:
-        month = input('Which month - January, February, March, April, May, or June?')
+        month = input('Which month - January, February, March, April, May, or June?').lower()
         if month in months:
             break
 
     # get user input for day of week (all, monday, tuesday, ... sunday)
     days = ['all', 'monday', 'tuesday', 'wednesday', 'thrusday', 'friday', 'saturday', 'sunday']
     while True:
-        day = input('Which day - Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday:')
+        day = input('Which day - Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday:').lower()
         if day in days:
             break
 
@@ -154,7 +154,7 @@ def trip_duration_stats(df):
     print('-'*40)
 
 
-def user_stats(df):
+def user_stats(df, city):
     """Displays statistics on bikeshare users."""
 
     print('\nCalculating User Stats...\n')
@@ -164,18 +164,19 @@ def user_stats(df):
     user_types = df['User Type'].value_counts()
     print(user_types)
 
-    # Display counts of gender
-    gender = df['Gender'].value_counts()
-    print(gender)
-    # Display earliest, most recent, and most common year of birth
+    if city.lower() != 'washington':
+        # Display counts of gender
+        gender = df['Gender'].value_counts()
+        print(gender)
+        # Display earliest, most recent, and most common year of birth
 
-    common_birth_year = df['Birth Year'].mode()[0]
-    earliest_birth_year = df['Birth Year'].max(axis=0)
-    recent_birth_year = df['Birth Year'].min(axis=0)
+        common_birth_year = df['Birth Year'].mode()[0]
+        earliest_birth_year = df['Birth Year'].max(axis=0)
+        recent_birth_year = df['Birth Year'].min(axis=0)
 
-    print('Most common Birth Year', common_birth_year)
-    print('Earliest Birth Year', earliest_birth_year)
-    print('Recent Birth Year', recent_birth_year)
+        print('Most common Birth Year', common_birth_year)
+        print('Earliest Birth Year', earliest_birth_year)
+        print('Recent Birth Year', recent_birth_year)
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
@@ -190,7 +191,7 @@ def main():
         time_stats(df)
         station_stats(df)
         trip_duration_stats(df)
-        user_stats(df)
+        user_stats(df, city)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
